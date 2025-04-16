@@ -2,10 +2,18 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import json
 import requests
+import os 
 load_dotenv()
 
 client =  OpenAI()
 
+def run_command(command):
+    result = os.system(command=command)
+    return result
+
+# print(run_command("ls"))
+
+#function to call api
 def get_weather(city:str):
     print(f"getting weather for {city}")
 
@@ -25,9 +33,13 @@ avaiable_tools= {
         'fn':get_weather,
         'description': "Takes a city name as an input and returns the current weather for the city",
     },
+    "run_command":{
+        "fn":run_command,
+        "description": "Take a command as an input to execute command on the system and returns output"
+    }
 }
 
-
+# system prompt
 system_prompt = """ 
 You are an helpful AI Asssistant who is specialized in resolving user query.
 You work on start, plan, action, observe mode.
@@ -50,6 +62,7 @@ For the given user query and available tools, plan the step by step exececution,
 
  Available Tools:
 - get_weather: Takes a city name as an input and returns the current weather for the city
+- run_command: Take a command as an input to execute command on the system and returns output
 
  Example:
  User Query: What is the weather of new york ?
