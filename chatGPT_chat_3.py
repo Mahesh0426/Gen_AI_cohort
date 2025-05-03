@@ -2,6 +2,9 @@
 from dotenv import load_dotenv
 from openai import OpenAI
 import json
+import colorama
+from colorama import Fore, Style
+colorama.init(autoreset=True)
 
 
 load_dotenv()
@@ -34,6 +37,8 @@ output:{{step: "validate", content: "seems like 4 is correct ans for 2 + 2."}}
 outputL{{step: "result", content:"2 + 2 = 4 and that is calculatd by addiing all numbers.}}
 
 """
+
+
 messages = [
      {"role":"system", "content":system_prompt},
 ]
@@ -53,9 +58,22 @@ while True:
     messages.append({"role":"assistant", "content": json.dumps(parse_response)})
 
     if parse_response.get("step") != "output":
-        print(f"🧠:{parse_response.get("content")}")
-        continue
-    print(f"🤖: {parse_response.get("content")}")
+       
+        print(f"{Fore.CYAN}🧠 Step: {parse_response.get('step').upper()}")
+        print(f"{Fore.YELLOW}{parse_response.get('content')}")
+        continue 
+
+    print("\n")
+    print(f"{Fore.GREEN}🤖 FINAL OUTPUT")
+    print(f"{Fore.WHITE}{Style.BRIGHT}{parse_response.get('content')}")
     break
+
+   
+
+    # if parse_response.get("step") != "output":
+    #     print(f"🧠:{parse_response.get("content")}")
+    #     continue
+    # print(f"🤖: {parse_response.get("content")}")
+    # break
 
 
